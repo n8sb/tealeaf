@@ -101,19 +101,13 @@ class Game
   end
 
   def play
-    player.pick_hand
-    puts "#{player.name} picks #{CHOICES[player.hand.value]}"
-    computer.pick_hand
-    puts "#{computer.name} picks #{CHOICES[computer.hand.value]}"
-    compare_hands
-
-    if @@computer_score == 3
-      puts "You lose!"
-    elsif @player_score
-      puts "You win!"
-    else  
-      play
-    end 
+    begin
+      player.pick_hand
+      puts "#{player.name} picks #{CHOICES[player.hand.value]}"
+      computer.pick_hand
+      puts "#{computer.name} picks #{CHOICES[computer.hand.value]}"
+      compare_hands
+    end until @@computer_score == 3 || @@player_score == 3
   end
 end
 
