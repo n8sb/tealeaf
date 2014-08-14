@@ -6,6 +6,7 @@
 
 # (HUMAN & COMPUTER) => PLAYER
 
+require 'pry'
 
 class Hand
   include Comparable
@@ -29,7 +30,7 @@ class Hand
 
   def display_winning_message
     case @value
-    when 'p'
+    when 'p' 
       puts "Paper wraps Rock!"
     when 'r'
       puts "Rock smashes Scissors!"
@@ -83,23 +84,28 @@ class Game
   end
 
   def compare_hands
+    computer_score = 0
+    player_score = 0
+    
     if player.hand == computer.hand
       puts "It's a tie!"
     elsif player.hand > computer.hand
       player.hand.display_winning_message
-      puts "#{player.name} won!"
+      player_score += 1
     else
       computer.hand.display_winning_message
-      puts "#{computer.name} won!"
+      computer_score += 1
     end
+    puts "#{player.name}: #{player_score} - #{computer.name}: #{computer_score}"
   end
 
   def play
-    player.pick_hand
-    puts "#{player.name} picks #{player.hand.value}"
-    computer.pick_hand
-    puts "#{computer.name} picks #{computer.hand.value}"
-    compare_hands
+    #begin
+      player.pick_hand
+      puts "#{player.name} picks #{CHOICES[player.hand.value]}"
+      computer.pick_hand
+      puts "#{computer.name} picks #{CHOICES[computer.hand.value]}"
+    #end if compare_hands.player_score == 3 || compare_hands.computer_score == 3 
   end
 end
 
