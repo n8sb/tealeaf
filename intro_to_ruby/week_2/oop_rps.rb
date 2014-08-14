@@ -6,8 +6,6 @@
 
 # (HUMAN & COMPUTER) => PLAYER
 
-require "pry"
-
 class Hand
   include Comparable
 
