@@ -6,7 +6,7 @@
 
 # (HUMAN & COMPUTER) => PLAYER
 
-require 'pry'
+require "pry"
 
 class Hand
   include Comparable
@@ -79,34 +79,43 @@ class Game
   attr_reader :player, :computer
 
   def initialize
+    @@computer_score = 0
+    @@player_score = 0
     @player = Human.new('Nate')
     @computer = Computer.new('Johnny-5')
+    
   end
 
   def compare_hands
-    computer_score = 0
-    player_score = 0
     
     if player.hand == computer.hand
       puts "It's a tie!"
     elsif player.hand > computer.hand
       player.hand.display_winning_message
-      player_score += 1
+      @@player_score += 1
     else
       computer.hand.display_winning_message
-      computer_score += 1
+      @@computer_score += 1
     end
-    puts "#{player.name}: #{player_score} - #{computer.name}: #{computer_score}"
+    puts "#{player.name}: #{@@player_score} - #{computer.name}: #{@@computer_score}"
   end
 
   def play
-    #begin
-      player.pick_hand
-      puts "#{player.name} picks #{CHOICES[player.hand.value]}"
-      computer.pick_hand
-      puts "#{computer.name} picks #{CHOICES[computer.hand.value]}"
-    #end if compare_hands.player_score == 3 || compare_hands.computer_score == 3 
+    player.pick_hand
+    puts "#{player.name} picks #{CHOICES[player.hand.value]}"
+    computer.pick_hand
+    puts "#{computer.name} picks #{CHOICES[computer.hand.value]}"
+    compare_hands
+
+    if @@computer_score == 3
+      puts "You lose!"
+    elsif @player_score
+      puts "You win!"
+    else  
+      play
+    end 
   end
 end
 
 game = Game.new.play
+
