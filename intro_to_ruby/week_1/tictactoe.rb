@@ -1,18 +1,19 @@
 # Ruby Tic-Tac-Toe
+class Board
+  def initialize_board
+    b = {}
+    (1..9).each { |position| b[position] = ' ' }
+    b
+  end
 
-def initialize_board
-  b = {}
-  (1..9).each { |position| b[position] = ' ' }
-  b
-end
-
-def draw_board(b)
-  system 'clear'
-  puts "  #{b[1]}  |  #{b[2]}  |  #{b[3]}  "
-  puts "-----------------"
-  puts "  #{b[4]}  |  #{b[5]}  |  #{b[6]}  "
-  puts "-----------------"
-  puts "  #{b[7]}  |  #{b[8]}  |  #{b[9]}  "
+  def draw_board(b)
+    system 'clear'
+    puts "  #{b[1]}  |  #{b[2]}  |  #{b[3]}  "
+    puts "-----------------"
+    puts "  #{b[4]}  |  #{b[5]}  |  #{b[6]}  "
+    puts "-----------------"
+    puts "  #{b[7]}  |  #{b[8]}  |  #{b[9]}  "
+  end
 end
 
 def empty_positions(b)
