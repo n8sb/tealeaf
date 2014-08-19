@@ -13,16 +13,35 @@
 
 # (HUMAN & COMPUTER) => PLAYER
 
-# OPTIONAL
-# Human gets a choice of X or O
-require "pry"
-
 class Board
   WINNING_LINES = [[1,2,3], [4,5,6], [7,8,9], [1,4,7], [2,5,8], [3,6,9], [1,5,9], [3,5,7]]
  
   def initialize
     @data = {}
     (1..9).each {|position| @data[position] = Square.new(' ')}
+  end
+
+  def all_squares_marked?
+    empty_squares.size == 0
+  end
+
+  def empty_squares
+    @data.select {|_, square| square.empty?}.values
+  end
+
+  def empty_positions
+    @data.select {|_, square| square.empty?}.keys
+  end
+
+  def mark_square(position, marker)
+    @data[position].mark(marker)
+  end
+
+  def three_squares_in_a_row?(marker)
+  WINNING_LINES.each do |line|
+    return true if @data[line[0]].value == marker && @data[line[1]].value  == marker && @data[line[2]].value == marker
+  end
+  false
   end
 
   def draw
@@ -33,34 +52,11 @@ class Board
     puts "-----------------"
     puts "  #{@data[7]}  |  #{@data[8]}  |  #{@data[9]}  "
   end
-
-  def all_squares_marked?
-    empty_squares.size == 0
-  end
-
-  def empty_squares
-    @data.select {|_, square| square.value == ' ' }.values
-  end
-
-  def empty_positions
-  @data.select {|_, square| square.empty? }.keys
-  end
-
-  def mark_square(position, marker)
-    @data[position].mark(marker)
-  end
-
-  def winning_condition?(marker)
-    WINNING_LINES.each do |line|
-      return true if @data[line[0]].value == marker && @data[line[1]].value  == marker && @data[line[2]].value == marker
-    end
-    false
-  end
 end
 
 class Square
 
-  attr_accessor :value
+  attr_reader :value
 
   def initialize(value)
     @value = value
@@ -71,69 +67,96 @@ class Square
   end
 
   def empty?
-    @value = ' '
+    @value == ' '
   end
+
   def to_s
     @value
   end
 end
 
 class Player
-  attr_reader :marker, :name
-  def initialize(name, marker)
+  attr_reader :name
+
+  def initialize(name)
     @name = name
-    @marker = marker
   end
 end
 
 class Game
+
+  MARKERS = ["X","O"]
+
   def initialize
     @board = Board.new
-    @human = Player.new('Nate', 'X')
-    @computer = Player.new('Johnny5','0')
+    @human = Player.new("Nate")
+    @computer = Player.new("Johnny5")
     @current_player = @human
+  end
+
+  def choose_marker
+    begin
+    puts "Choose 'X' or 'O'"
+    @human_marker = gets.chomp.upcase!
+    end until MARKERS.include?(@human_marker)
+    @computer_marker = MARKERS.reject{|m| m == @human_marker}.join
   end
 
   def current_player_marks_square
     if @current_player == @human
+      @marker = @human_marker
       begin
-        puts "Choose a position (1-9):"
+        puts "Choose a position #{@board.empty_positions} to place a piece:"
         position = gets.chomp.to_i
       end until @board.empty_positions.include?(position)
     else
       position = @board.empty_positions.sample
+      @marker = @computer_marker
     end
-    @board.mark_square(position, @current_player.marker)
+    @board.mark_square(position, @marker)
   end
-
-  def current_player_win?
-    @board.winning_condition?(@current_player.marker)
-  end
-
+ 
   def alternate_player
-      if @current_player == @human
-        @current_player = @computer
-      else
-        @current_player = @human
-      end
+    if @current_player == @human
+      @current_player = @computer
+    else
+      @current_player = @human
+    end
+  end
+ 
+  def current_player_wins?
+    @board.three_squares_in_a_row?(@marker)
   end
 
+  def play_again?
+    begin
+    puts "Would you like to play again (y/n)?"
+    confirm = gets.chomp.downcase
+    end until confirm.include?("y") || confirm.include?("n") 
+    if confirm == "y"
+      play
+    else
+      puts "Thanks for playing"
+    end
+  end
+ 
   def play
     @board.draw
+    choose_marker
     loop do
       current_player_marks_square
       @board.draw
-      if current_player_win?
-        puts "The winner is #{current_player.name}"
+      if current_player_wins?
+        puts "The winner is #{@current_player.name}!"
         break
-      elsif @board.all_squares_marked?  
-        puts "It's a tie"
+      elsif @board.all_squares_marked?
+        puts "It's a tie."
         break
       else
-      alternate_player
+        alternate_player
       end
     end
-    puts "Bye"
+    play_again?
   end
 end
 
