@@ -96,8 +96,8 @@ class Game
 
   def choose_marker
     begin
-    puts "Choose 'X' or 'O'"
-    @human_marker = gets.chomp.upcase!
+      puts "Choose 'X' or 'O'"
+      @human_marker = gets.chomp.upcase!
     end until MARKERS.include?(@human_marker)
     @computer_marker = MARKERS.reject{|m| m == @human_marker}.join
   end
@@ -134,12 +134,13 @@ class Game
     confirm = gets.chomp.downcase
     end until confirm.include?("y") || confirm.include?("n") 
     if confirm == "y"
+      @board = Board.new
       play
     else
-      puts "Thanks for playing"
+      puts "Thanks for playing!"
     end
   end
- 
+
   def play
     @board.draw
     choose_marker
