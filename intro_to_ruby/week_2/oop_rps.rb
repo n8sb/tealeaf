@@ -77,8 +77,8 @@ class Game
   attr_reader :player, :computer
 
   def initialize
-    @@computer_score = 0
-    @@player_score = 0
+    @computer_score = 0
+    @player_score = 0
     @player = Human.new('Nate')
     @computer = Computer.new('Johnny-5')
     
@@ -90,12 +90,12 @@ class Game
       puts "It's a tie!"
     elsif player.hand > computer.hand
       player.hand.display_winning_message
-      @@player_score += 1
+      @player_score += 1
     else
       computer.hand.display_winning_message
-      @@computer_score += 1
+      @computer_score += 1
     end
-    puts "#{player.name}: #{@@player_score} - #{computer.name}: #{@@computer_score}"
+    puts "#{player.name}: #{@player_score} - #{computer.name}: #{@computer_score}"
   end
 
   def play
@@ -105,7 +105,7 @@ class Game
       computer.pick_hand
       puts "#{computer.name} picks #{CHOICES[computer.hand.value]}"
       compare_hands
-    end until @@computer_score == 3 || @@player_score == 3
+    end until @computer_score == 3 || @player_score == 3
   end
 end
 

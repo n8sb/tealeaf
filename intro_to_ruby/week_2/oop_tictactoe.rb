@@ -15,10 +15,11 @@
 
 # OPTIONAL
 # Human gets a choice of X or O
+require "pry"
 
 class Board
-WINNING_LINES = [[1,2,3], [4,5,6], [7,8,9], [1,4,7], [2,5,8], [3,6,9], [1,5,9], [3,5,7]]
-
+  WINNING_LINES = [[1,2,3], [4,5,6], [7,8,9], [1,4,7], [2,5,8], [3,6,9], [1,5,9], [3,5,7]]
+ 
   def initialize
     @data = {}
     (1..9).each {|position| @data[position] = Square.new(' ')}
@@ -26,13 +27,11 @@ WINNING_LINES = [[1,2,3], [4,5,6], [7,8,9], [1,4,7], [2,5,8], [3,6,9], [1,5,9], 
 
   def draw
     system 'clear'
-    puts
     puts "  #{@data[1]}  |  #{@data[2]}  |  #{@data[3]}  "
     puts "-----------------"
     puts "  #{@data[4]}  |  #{@data[5]}  |  #{@data[6]}  "
     puts "-----------------"
     puts "  #{@data[7]}  |  #{@data[8]}  |  #{@data[9]}  "
-    puts
   end
 
   def all_squares_marked?
@@ -40,11 +39,11 @@ WINNING_LINES = [[1,2,3], [4,5,6], [7,8,9], [1,4,7], [2,5,8], [3,6,9], [1,5,9], 
   end
 
   def empty_squares
-    @data.select {|_, square| square.value == ' '}.values
+    @data.select {|_, square| square.value == ' ' }.values
   end
 
   def empty_positions
-    @data.select {|_, square| square.empty? }.keys
+  @data.select {|_, square| square.empty? }.keys
   end
 
   def mark_square(position, marker)
@@ -60,7 +59,7 @@ WINNING_LINES = [[1,2,3], [4,5,6], [7,8,9], [1,4,7], [2,5,8], [3,6,9], [1,5,9], 
 end
 
 class Square
-  
+
   attr_accessor :value
 
   def initialize(value)
@@ -71,14 +70,9 @@ class Square
     @value = marker
   end
 
-  def occupied?
-    @value != ' '
-  end
-
   def empty?
     @value = ' '
   end
-
   def to_s
     @value
   end
@@ -95,8 +89,8 @@ end
 class Game
   def initialize
     @board = Board.new
-    @human = Player.new("Nate", "X")
-    @computer = Player.new("Johnny-5", "O")
+    @human = Player.new('Nate', 'X')
+    @computer = Player.new('Johnny5','0')
     @current_player = @human
   end
 
@@ -117,11 +111,11 @@ class Game
   end
 
   def alternate_player
-    if @current_player == @human
-      @current_player = @computer
-    else
-      @current_player = @human
-    end
+      if @current_player == @human
+        @current_player = @computer
+      else
+        @current_player = @human
+      end
   end
 
   def play
@@ -130,13 +124,13 @@ class Game
       current_player_marks_square
       @board.draw
       if current_player_win?
-        puts "The winner is #{current_player.name}!"
+        puts "The winner is #{current_player.name}"
         break
-      elsif @board.all_squares_marked?
-        put "It's a tie!"
+      elsif @board.all_squares_marked?  
+        puts "It's a tie"
         break
       else
-        alternate_player
+      alternate_player
       end
     end
     puts "Bye"
