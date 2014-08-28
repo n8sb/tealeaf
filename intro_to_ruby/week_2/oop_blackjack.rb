@@ -27,7 +27,7 @@ class Card
   end
 
   def pretty_output
-    "The #{face_value} of #{find_suit}"
+    "The #{find_face} of #{find_suit}"
   end
 
   def to_s
@@ -40,6 +40,17 @@ class Card
                 when 'D' then 'Diamonds'
                 when 'S' then 'Spades'
                 when 'C' then 'Clubs'
+              end
+    ret_val
+  end
+
+ def find_face
+    ret_val = case face_value
+                when 'A' then 'Ace'
+                when 'J' then 'Jack'
+                when 'K' then 'King'
+                when 'Q' then 'Queen'
+                else ret_val = face_value
               end
     ret_val
   end
@@ -161,15 +172,15 @@ class Game
     if @dealer.total == 21
       @dealer.show_hand
       puts "Dealer has Blackjack. You lose."
-      exit
+      play_again?
     elsif @player.total == 21 && @dealer.total != 21
       @dealer.show_hand
       puts "Congrats, you got blackjack! You win!"
-      exit
+      play_again?
     elsif @player.total == 21 && @dealer.total == 21
       @dealer.show_hand
       puts "Dealer got blackjack too. It's a draw."
-      exit
+      play_again?
     end
   end
 
@@ -197,6 +208,11 @@ class Game
       elsif @player.total > 21
         puts "You busted!"
         play_again?
+      elsif @player.total == 21
+        puts ""
+        puts "You have 21. Dealer's turn"
+        puts ""
+        break
       end
     end
   end
