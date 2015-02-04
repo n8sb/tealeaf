@@ -29,7 +29,7 @@ arr1.merge(arr2)
 # arr1 = { 1: "cat", 2: "dog", 3: "bird"}
 # arr2 = { 3: "bird", 4: "turtle", 5: "snake"}
 
-arr1.merge(arr2)
+arr1.merge!(arr2)
 
 # arr1 = { 1: "cat", 2: "dog", 3: "bird", "turtle", 5: "snake"}
 # arr2 = { 3: "bird", 4: "turtle", 5: "snake"}
